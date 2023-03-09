@@ -36,6 +36,10 @@ function App() {
     await axios.post('http://localhost:4000/cafes', values.cafe);
   };
 
+  const onLogin = async (values: { login: IUser }) => {
+    await axios.post('http://localhost:4000/auth/login', values.login);
+  };
+
   const handleSelectChange = (value: string) => {
     switch (value) {
       case 'male':
@@ -130,6 +134,29 @@ function App() {
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Button type="primary" htmlType="submit">
             Submit
+          </Button>
+        </Form.Item>
+      </Form>
+
+      <Form
+        {...layout}
+        name="cafe-c"
+        onFinish={onLogin}
+        style={{ maxWidth: 600 }}
+        validateMessages={validateMessages}>
+        <Form.Item
+          label="Email"
+          name={['login', 'email']}
+          rules={[{ type: 'email', required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name={['login', 'password']} label="Password" rules={[{ required: true }]}>
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Button type="primary" htmlType="submit">
+            Login
           </Button>
         </Form.Item>
       </Form>

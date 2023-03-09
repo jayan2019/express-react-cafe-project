@@ -16,13 +16,22 @@ const db = require("../services/db");
 
 // Create base modl abd extend it here
 class User {
-  constructor(id, email, password, first_name, last_name, cafe_id) {
+  constructor(
+    id,
+    email,
+    password,
+    first_name,
+    last_name,
+    cafe_id,
+    refresh_token
+  ) {
     this.id = id;
     this.email = email;
     this.password = password;
     this.first_name = first_name;
     this.last_name = last_name;
     this.cafe_id = cafe_id;
+    this.refresh_token = refresh_token;
   }
 
   static async create({ email, password, first_name, last_name, cafe_id }) {
@@ -51,8 +60,53 @@ class User {
   static async findById(id) {
     const results = await db.query("SELECT * FROM users WHERE id = ?", [id]);
     if (!results.length) return null;
+    const { email, password, first_name, last_name, cafe_id, refresh_token } =
+      results[0];
+    return new User(
+      id,
+      email,
+      password,
+      first_name,
+      last_name,
+      cafe_id,
+      refresh_token
+    );
+  }
+
+  static async findByEmail({ email }) {
+    const results = await db.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+    if (!results.length) return null;
+    const { id, password, first_name, last_name, cafe_id, refresh_token } =
+      results[0];
+    return new User(
+      id,
+      email,
+      password,
+      first_name,
+      last_name,
+      cafe_id,
+      refresh_token
+    );
+  }
+
+  static async updateToken({ refresh_token, id }) {
+    const results = await db.query(
+      "UPDATE users SET refresh_token = ? WHERE id = ?",
+      [refresh_token, id]
+    );
+    if (!results.length) return null;
     const { email, password, first_name, last_name, cafe_id } = results[0];
-    return new User(id, email, password, first_name, last_name, cafe_id);
+    return new User(
+      id,
+      email,
+      password,
+      first_name,
+      last_name,
+      cafe_id,
+      refresh_token
+    );
   }
 }
 
