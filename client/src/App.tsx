@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
-import { Button, Form, Input, Select, Table, Tag } from 'antd';
+import { Button, Form, Input, Select, Table } from 'antd';
 import type { FormInstance } from 'antd/es/form';
-
-const { Column, ColumnGroup } = Table;
 
 interface IUser {
   email: string;
@@ -15,25 +12,57 @@ interface IUser {
   cafe_id: number;
 }
 
+interface ICafe {
+  label: string;
+  value: number;
+}
+
+const { Column } = Table;
+const token = 'token';
+const refreshToken = 'refreshToken';
+
 function App() {
   const formRef = React.useRef<FormInstance>(null);
   const [users, setUsers] = useState<IUser[]>([]);
+  const [cafes, setCafes] = useState<ICafe[]>([]);
 
-  const getData = async () => {
-    const { data } = await axios.get('http://localhost:4000/users');
+  const getUserData = async () => {
+    const { data } = await axios.get('http://localhost:4000/users', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     setUsers(data);
   };
 
+  const getCafeData = async () => {
+    const { data } = await axios.get('http://localhost:4000/cafes', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setCafes(data.map((c: any) => ({ label: c.name, value: c.id })));
+  };
+
+  const onLogout = async () => {
+    await axios.get('http://localhost:4000/auth/logout', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  };
+
+  const onRefresh = async () => {
+    await axios.post('http://localhost:4000/auth/refresh', { refresh_token: refreshToken });
+  };
+
   useEffect(() => {
-    getData();
+    getUserData();
+    getCafeData();
   }, []);
 
   const onFinish = async (values: { user: IUser }) => {
-    await axios.post('http://localhost:4000/users', values.user);
+    await axios.post('http://localhost:4000/auth/create', values.user);
   };
 
   const onCafeFinish = async (values: { cafe: IUser }) => {
-    await axios.post('http://localhost:4000/cafes', values.cafe);
+    await axios.post('http://localhost:4000/cafes', values.cafe, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   };
 
   const onLogin = async (values: { login: IUser }) => {
@@ -93,14 +122,7 @@ function App() {
           <Input />
         </Form.Item>
         <Form.Item name={['user', 'cafe_id']} label="Last Name">
-          <Select
-            style={{ width: 120 }}
-            onChange={handleSelectChange}
-            options={[
-              { label: 'Cafe 1', value: 1 },
-              { label: 'Cafe 2', value: 2 }
-            ]}
-          />
+          <Select style={{ width: 120 }} onChange={handleSelectChange} options={cafes} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
@@ -160,6 +182,14 @@ function App() {
           </Button>
         </Form.Item>
       </Form>
+
+      <Button type="primary" htmlType="submit" onClick={onLogout}>
+        Logout
+      </Button>
+
+      <Button type="primary" htmlType="submit" onClick={onRefresh}>
+        Refresh
+      </Button>
     </div>
   );
 }

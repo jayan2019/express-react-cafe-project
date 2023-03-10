@@ -10,4 +10,13 @@ const createCafe = async (req, res) => {
   }
 };
 
-module.exports = { createCafe };
+const getCafe = async (req, res) => {
+  try {
+    const cafes = await Cafe.getAll();
+    return res.status(200).json(cafes);
+  } catch (error) {
+    return res.status(500).json({ error: error ?? "Internal server error" });
+  }
+};
+
+module.exports = { createCafe, getCafe };

@@ -39,18 +39,13 @@ class User {
       "INSERT INTO users (email, password, first_name, last_name, cafe_id) VALUES (?, ?, ?, ?, ?)",
       [email, password, first_name, last_name, cafe_id]
     );
-    return new User(
-      result.insertId,
-      email,
-      password,
-      first_name,
-      last_name,
-      cafe_id
-    );
+    return new User(result.insertId, email, first_name, last_name, cafe_id);
   }
 
   static async getAll() {
-    const results = await db.query("SELECT * FROM users");
+    const results = await db.query(
+      "SELECT id, email, first_name, last_name, cafe_id FROM users"
+    );
     // const results = await db.query(
     //   "SELECT * FROM users INNER JOIN cafes ON users.cafe_id = cafes.id"
     // );
@@ -89,6 +84,17 @@ class User {
       cafe_id,
       refresh_token
     );
+  }
+
+  static async findByToken({ token }) {
+    const results = await db.query(
+      "SELECT * FROM users WHERE refresh_token = ?",
+      [token]
+    );
+    if (!results.length) return null;
+    const { id, email, first_name, last_name, cafe_id, refresh_token } =
+      results[0];
+    return new User(id, email, first_name, last_name, cafe_id, refresh_token);
   }
 
   static async updateToken({ refresh_token, id }) {

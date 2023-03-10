@@ -14,6 +14,11 @@ class Cafe {
     );
     return new Cafe(result.insertId, name, address);
   }
+
+  static async getAll() {
+    const result = await db.query("SELECT * FROM cafes");
+    return result;
+  }
 }
 
 module.exports = Cafe;
