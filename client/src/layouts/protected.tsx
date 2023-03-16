@@ -1,7 +1,8 @@
 import { Outlet, Navigate } from 'react-router-dom';
+import { useAppSelector } from '../app/hooks';
 
 const ProtectedLayout = () => {
-  const isAutorised = true;
+  const isAutorised = useAppSelector((store) => store.auth.token && store.auth.user);
 
   return (
     <div>

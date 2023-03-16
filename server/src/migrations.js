@@ -13,7 +13,7 @@ const connection = require("./services/db");
         password VARCHAR(255) NOT NULL,
         first_name VARCHAR(50),
         last_name VARCHAR(50),
-        cafe_id INT(8) NOT NULL,
+        cafe_id INT(8) NULL,
         refresh_token VARCHAR(255) NULL
     )`);
 

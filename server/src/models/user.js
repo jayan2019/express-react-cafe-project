@@ -55,17 +55,8 @@ class User {
   static async findById(id) {
     const results = await db.query("SELECT * FROM users WHERE id = ?", [id]);
     if (!results.length) return null;
-    const { email, password, first_name, last_name, cafe_id, refresh_token } =
-      results[0];
-    return new User(
-      id,
-      email,
-      password,
-      first_name,
-      last_name,
-      cafe_id,
-      refresh_token
-    );
+    const { email, first_name, last_name, cafe_id, refresh_token } = results[0];
+    return new User(id, email, first_name, last_name, cafe_id, refresh_token);
   }
 
   static async findByEmail({ email }) {
@@ -102,17 +93,7 @@ class User {
       "UPDATE users SET refresh_token = ? WHERE id = ?",
       [refresh_token, id]
     );
-    if (!results.length) return null;
-    const { email, password, first_name, last_name, cafe_id } = results[0];
-    return new User(
-      id,
-      email,
-      password,
-      first_name,
-      last_name,
-      cafe_id,
-      refresh_token
-    );
+    return results;
   }
 }
 

@@ -1,5 +1,6 @@
 import { useRoutes } from 'react-router-dom';
 import Login from '../pages/login';
+import Singup from '../pages/signup';
 
 const AuthRoutes = () => {
   const routes = useRoutes([
@@ -9,7 +10,7 @@ const AuthRoutes = () => {
     },
     {
       path: '/signup',
-      element: <div>Sign Up</div>
+      element: <Singup />
     }
   ]);
 

@@ -2,6 +2,7 @@ import { Provider } from 'react-redux';
 import { createRoot } from 'react-dom/client';
 
 import App from './App';
+import 'antd/dist/reset.css';
 import { store } from './app/store';
 import reportWebVitals from './reportWebVitals';
 

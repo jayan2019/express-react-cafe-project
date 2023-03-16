@@ -16,16 +16,16 @@ const login = async (req, res) => {
     if (match) {
       const accessToken = jwt.sign(
         { email: foundUser.email },
-        process.env.ACCESS_TOKEN_SECRET
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "1d" }
       );
       const refreshToken = jwt.sign(
         { email: foundUser.email },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "1d" }
+        process.env.REFRESH_TOKEN_SECRET
       );
 
       await User.updateToken({ refresh_token: refreshToken, id: foundUser.id });
-      res.json({ accessToken, refreshToken });
+      res.json({ accessToken, user: { ...foundUser, password: "" } });
     } else {
       res.sendStatus(401);
     }
