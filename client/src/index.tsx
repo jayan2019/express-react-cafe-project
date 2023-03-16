@@ -1,15 +1,18 @@
 import { Provider } from 'react-redux';
 import { createRoot } from 'react-dom/client';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import App from './App';
 import 'antd/dist/reset.css';
-import { store } from './app/store';
+import { store, presistor } from './app/store';
 import reportWebVitals from './reportWebVitals';
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <Provider store={store}>
-    <App />
+    <PersistGate persistor={presistor}>
+      <App />
+    </PersistGate>
   </Provider>
 );
 
