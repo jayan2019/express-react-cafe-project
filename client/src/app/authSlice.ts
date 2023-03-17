@@ -35,7 +35,8 @@ const authSlice = createSlice({
       state.user = action.payload.user;
     },
     logout(state) {
-      state = initialState;
+      state.token = '';
+      state.user = undefined;
     },
     changeTheme(state, action: PayloadAction<string>) {
       state.theme = action.payload;
