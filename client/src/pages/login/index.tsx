@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button, Checkbox, Form, Input, Typography, Layout } from 'antd';
 
@@ -22,6 +23,7 @@ const layoutStyle: React.CSSProperties = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const onSubmit = async (formData: IFormData) => {
@@ -33,35 +35,45 @@ const Login = () => {
     }
   };
 
+  const validateMessages = {
+    required: '${label}' + ` ${t('validate_required')}`,
+    types: {
+      email: '${label}' + ` ${t('validate_email')}`
+    }
+  };
+
   return (
     <Layout style={layoutStyle}>
-      <Text style={{ fontSize: 50, fontWeight: 'bold', textAlign: 'center' }}>L O G I N</Text>
-      <Text style={{ textAlign: 'center', marginBottom: 30 }}>WITH YOUR CREDENTIALS</Text>
+      <Text style={{ fontSize: 50, fontWeight: 'bold', textAlign: 'center' }}>
+        {t('login_lable')}
+      </Text>
+      <Text style={{ textAlign: 'center', marginBottom: 30 }}>{t('login_greetings')}</Text>
       <Form
         name="basic"
         autoComplete="off"
         onFinish={onSubmit}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 8 }}
-        initialValues={{ remember: true }}>
-        <Form.Item name="email" label="Email" rules={[{ type: 'email', required: true }]}>
+        initialValues={{ remember: true }}
+        validateMessages={validateMessages}>
+        <Form.Item
+          name="email"
+          label={t('label_email')}
+          rules={[{ type: 'email', required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item
-          name="password"
-          label="Password"
-          rules={[{ required: true, message: 'Please input your password!' }]}>
+        <Form.Item name="password" label={t('label_password')} rules={[{ required: true }]}>
           <Input.Password />
         </Form.Item>
 
         <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 8 }}>
-          <Checkbox>Remember me</Checkbox>
+          <Checkbox>{t('label_remenber')}</Checkbox>
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
-          <Button htmlType="submit">Login</Button>
+          <Button htmlType="submit">{t('button_login')}</Button>
           <Button type="link" style={{ marginLeft: 10 }} onClick={() => navigate('signup')}>
-            Sign Up
+            {t('button_signup')}
           </Button>
         </Form.Item>
       </Form>

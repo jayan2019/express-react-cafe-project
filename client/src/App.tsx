@@ -1,6 +1,7 @@
 import { ConfigProvider, theme } from 'antd';
 import { RouterProvider } from 'react-router-dom';
 
+import './config/i18n';
 import { router } from './routes';
 import { themeConfig } from './config/theme';
 import { useAppSelector } from './app/hooks';

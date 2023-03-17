@@ -45,11 +45,11 @@ const Singup = () => {
       <Text style={{ fontSize: 50, fontWeight: 'bold', textAlign: 'center' }}>S I G N U P</Text>
       <Text style={{ textAlign: 'center', marginBottom: 30 }}>FOR AMAZING CAFE EXPERIENCE</Text>
       <Form
+        ref={formRef}
+        onFinish={onSubmit}
+        name="nest-messages"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 8 }}
-        ref={formRef}
-        name="nest-messages"
-        onFinish={onSubmit}
         validateMessages={validateMessages}>
         <Form.Item label="Email" name="email" rules={[{ type: 'email', required: true }]}>
           <Input />
@@ -65,9 +65,7 @@ const Singup = () => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
-          <Button type="primary" htmlType="submit">
-            Signup
-          </Button>
+          <Button htmlType="submit">Signup</Button>
           <Button type="link" style={{ marginLeft: 10 }} onClick={() => navigate(-1)}>
             Back to Login
           </Button>

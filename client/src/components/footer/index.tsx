@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Layout, Typography, theme } from 'antd';
 import { CoffeeOutlined } from '@ant-design/icons';
 
@@ -20,11 +21,12 @@ const footerStyle: React.CSSProperties = {
 
 const Footer = () => {
   const { token } = useToken();
+  const { t } = useTranslation();
 
   return (
     <BaseFooter style={footerStyle}>
       <Text style={{ fontSize: 12, color: token.colorTextLabel }}>
-        <CoffeeOutlined /> {`My Cafe - V${APP_VERSION} - All rights reserved`}
+        <CoffeeOutlined /> {`My Cafe - V${APP_VERSION} - ${t('footer_rights')}`}
       </Text>
     </BaseFooter>
   );
