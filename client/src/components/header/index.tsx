@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   UserOutlined,
   CoffeeOutlined,
   LogoutOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
   FontColorsOutlined,
   FormatPainterOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { Layout, Typography, Switch, theme, Avatar, Dropdown, Space } from 'antd';
+import { Layout, Typography, Switch, theme, Avatar, Dropdown, Button, Space } from 'antd';
 
 import { themeConfig } from '../../config/theme';
 import { changeTheme, logout } from '../../app/authSlice';
@@ -21,15 +23,31 @@ const { Header: BaseHeader } = Layout;
 const headerStyle: React.CSSProperties = {
   height: 60,
   display: 'flex',
+  paddingLeft: 10,
   alignItems: 'center',
   justifyContent: 'space-between'
 };
 
+const iconStyle: React.CSSProperties = {
+  fontSize: 25,
+  display: 'flex',
+  textAlign: 'center'
+};
+
+const textStyle: React.CSSProperties = {
+  fontSize: 30,
+  display: 'flex',
+  fontWeight: 'bold',
+  textAlign: 'center'
+};
+
 interface IHeader {
+  collapsed?: boolean;
   isAutorised?: boolean;
+  toggleCollapsed?: () => void;
 }
 
-const Header = ({ isAutorised }: IHeader) => {
+const Header = ({ isAutorised, collapsed, toggleCollapsed }: IHeader) => {
   const { token } = useToken();
   const dispatch = useAppDispatch();
   const { i18n } = useTranslation();
@@ -69,10 +87,19 @@ const Header = ({ isAutorised }: IHeader) => {
   ];
 
   return (
-    <BaseHeader style={headerStyle}>
-      <Text style={{ color: token.colorWhite, fontSize: 30, fontWeight: 'bold' }}>
-        <CoffeeOutlined /> My Cafe
-      </Text>
+    <BaseHeader style={{ ...headerStyle, paddingLeft: isAutorised ? 10 : 50 }}>
+      <Space>
+        {toggleCollapsed && (
+          <Button
+            type="text"
+            onClick={toggleCollapsed}
+            style={{ ...iconStyle, color: token.colorWhite }}>
+            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          </Button>
+        )}
+        <CoffeeOutlined style={{ ...iconStyle, color: token.colorWhite }} />
+        <Text style={{ ...textStyle, color: token.colorWhite }}>My Cafe</Text>
+      </Space>
       {isAutorised ? (
         <Dropdown arrow menu={{ items: menuItems, selectedKeys: [`${i18n.language}`] }}>
           <Avatar icon={<UserOutlined />} />

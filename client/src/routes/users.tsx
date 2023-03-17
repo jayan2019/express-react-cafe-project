@@ -1,10 +1,11 @@
 import { useRoutes } from 'react-router-dom';
+import User from '../pages/user';
 
 const UserRoutes = () => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <div>User Page</div>
+      element: <User />
     }
   ]);
 
